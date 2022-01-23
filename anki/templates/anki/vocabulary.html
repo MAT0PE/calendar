@@ -1,0 +1,339 @@
+<html lang="ja">
+    {% load static %}
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'study_record/style.css' %}">
+    </head>
+    <body style="background-color: rgb(70, 103, 131);">
+        <nav class="navbar navbar-expand navbar-dark" style="padding-left: 10px; padding-right: 10px;">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                    <i class="fa fa-pencil" style="font-size:36px; margin-right: 20px !important;"></i>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" id="home" href="{% url 'main' %}">ホーム</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="edit" href="{% url 'edit_and_delete' %}">追加/編集</a>
+                        </li>
+                    <li class="nav-item">
+                    <a class="nav-link" id="record" href="{% url 'detail' %}">詳細</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" id="wordlists" href="{% url 'vocabulary' %}">暗記</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="friends" href="{% url 'friends' %}">友達</a>
+                    </li>
+                </ul>
+                <a href="{% url 'logout' %}" class="nav-item btn btn-outline-secondary ml-auto loginPage" style="margin-left: auto;" type="submit">ログアウト</a>
+            </div>
+        </nav>
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form.data.as_hidden }}
+        </form>
+        </div>
+        <div class="jumbotron">
+            <h1 class="display-4">継続は力なり</h1><br/>
+            <p class="lead" style="font-size:15px; text-align: right; margin-right: 20px;"><i>We are what we repeatedly do. Excellence, then, is not an act, but a habit.</i></p>
+            <p style="color: rgb(37, 37, 37); font-size:10px; text-align: right;">-Aristotle</p>
+            <hr class="my-4">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-6">
+                        <p>新規単語を追加する</p>　　<!-- modalを接続する -->
+                        <a class="btn btn-primary" role="button" href="/register_vocab">登録</a>
+                    </div>
+                    <div class="col-6">
+                        <p style="margin-left: 20px;">テストを始める</p>
+                        <div>　 <!-- modalを接続する -->
+                            <button class="btn btn-primary" id="displayButton2" role="button">入力形式</button>
+                            <button class="btn btn-primary" id="displayButton" role="button">確認形式</button>
+                        </div>
+                        <p style="margin-left: 20px;">
+                            {% if exist %}
+                            {% for m in message %}
+                                ステージ{{m.state}}：{{m.num}}個<br>
+                            {% endfor %}
+                            {% endif %}
+                            {% if remain == 0 %}
+                                <br>本日学習する単語はもうありません<br>
+                            {% else %}
+                                <br>本日学習する単語はあと{{remain}}個あります
+                            {% endif %}</p>
+                    </div>
+                </div>
+            </div>
+          </div>
+        <!-- 問題を表示するmodal -->
+        <div class="modal fade" id="testModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="frenchWord">ここにフランス語</h4>
+                    </div>
+                    <div class="modal-body" id="exampleOfProblem">
+                        ここの例文はoption
+                    </div>
+                    <div class="modal-footer" id="answerDisplayButton">
+                        <button type="button" class="btn closeButton">閉じる</button>
+                        <button type="button" class="btn btn-primary" id="displayAnswer">答え</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 解答を表示するmodal -->
+        <div class="modal fade" id="testModal2" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="answer">ここに解答</h4>
+                    </div>
+                    <div class="modal-body" id="exampleOfAnswer">
+                        例文あれば表示
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn closeButton">close</button>
+                        <input type="button" class="btn btn-primary" id="displayProblem" value="分からなかった">
+                        <button type="button" class="btn btn-primary" id="displayProblem2">分かった</button>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div class="modal fade" id="testModal3" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="japaneseWord">ここに日本語</h4>
+                    </div>
+                    <div class="modal-body" id="divOfInputAnswer">
+                        <input type="text" id="inputAnswer" value="">
+                    </div>
+                    <div class="modal-footer" id="answerdisplayButton2">
+                        <button type="button" class="btn closeButton2">閉じる</button>
+                        <button type="submit" class="btn btn-primary" id="displayAnswer2">答え</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 解答を表示するmodal -->
+        <div class="modal fade" id="testModal4" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="answer2">ここに解答</h4>
+                        <p id="judge">正解不正解</p>
+                    </div>
+                    <div class="modal-body" id="exampleOfAnswer2">
+                        例文あれば表示
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn closeButton2">閉じる</button>
+                        <button type="button" class="btn btn-primary" id="displayProblem3">次の問題</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 最初のmodal -->
+        <div class="modal fade" id="IM" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="titleIM"></h4>
+                    </div>
+                    <div class="modal-body">開始しますか？</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn closeButtonIM">閉じる</button>
+                        <button type="button" class="btn btn-primary" id="startIM">始める</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        var data = JSON.parse("{{vocabs}}".replaceAll("&quot;", '"').replaceAll('&#x27;', "'"));
+
+        //jsonデータのシャッフル
+        const shuffle = (data) => {
+            for (let i=0; i<data.length; i++){
+                const j = Math.floor(Math.random() *data.length);
+                [data[i], data[j]]=[data[j], data[i]];
+            }
+        };
+        shuffle(data);
+
+        //遷移の関数
+        const Answer = (data, i) => {
+                answer.innerHTML=data[i].japanese;
+                if (data[i].sentence){
+                        exampleOfAnswer.innerHTML=data[i].sentence;
+                    }else{
+                        exampleOfAnswer.innerHTML="例文はありません";
+                    }
+                $('#testModal2').modal('show');
+                $('#testModal').modal('hide');
+            };
+        const Answer2 = (data, i) => {
+            if (document.getElementById("inputAnswer").value==data[i].foreign) {
+                judge.innerHTML="正解です";
+                if (data[i].state>0){
+                    data[i].state++;
+                }else{
+                    data[i].state=1;
+                }
+                data[i].done = true;
+            }else{
+                if (data[i].state>0){
+                    data[i].state--;
+                }else{
+                    data[i].state=0;
+                }
+                data[i].done = true;
+                if (document.getElementById("inputAnswer").value==""){
+                    judge.innerHTML="未入力です";
+                }else{
+                    judge.innerHTML="不正解です"
+                }
+            }
+            document.getElementById("inputAnswer").value="";
+            answer2.innerHTML=data[i].foreign;
+            if (data[i].sentence){
+                    exampleOfAnswer2.innerHTML=data[i].sentence;
+                }else{
+                    exampleOfAnswer2.innerHTML="例文はありません";
+                }
+            $('#testModal4').modal('show');
+            $('#testModal3').modal('hide');
+        };
+
+        const nextProblem = (data, i) => {
+            if (i==data.length){
+                answerDisplayButton.innerHTML="";
+                frenchWord.innerHTML="お疲れ様でした！";
+                exampleOfProblem.innerHTML="テストは終了しました";
+                let newButton = document.createElement("input");
+                newButton.setAttribute("class", "btn btn-primary modal-footer");
+                newButton.setAttribute("style", "text-align:center;padding-top: 6px;padding-bottom: 6px;width: 80px;");
+                $(newButton).click(function(){
+                    $('#testModal').modal('hide');
+                })
+                newButton.value="送信";
+                document.getElementById("answerDisplayButton").appendChild(newButton);
+
+            }else{
+                document.getElementById('frenchWord').innerHTML=data[i].foreign;
+                if (data[i].sentence){
+                    exampleOfProblem.innerHTML=data[i].sentence;
+                }else{
+                    exampleOfProblem.innerHTML="例文はありません";
+                }
+            }
+            $('#testModal').modal('show');
+            $('#testModal2').modal('hide');
+            };
+
+        const nextProblem2 = (data, i) => {
+            if (i==data.length){
+                answerdisplayButton2.innerHTML="";
+                japaneseWord.innerHTML="お疲れさまでした！";
+                divOfInputAnswer.innerHTML="テストは終了しました";
+                let newButton = document.createElement("input");
+                newButton.setAttribute("class", "btn btn-primary modal-footer");
+                newButton.setAttribute("style", "text-align:center;padding-top: 6px;padding-bottom: 6px;width: 80px;");
+                $(newButton).click(function(){
+                    $('#testModal3').modal('hide');
+                    })
+                newButton.value="送信";
+                document.getElementById("answerdisplayButton2").appendChild(newButton);
+            }else{
+                document.getElementById('japaneseWord').innerHTML=data[i].japanese;
+            }
+            $('#testModal3').modal('show');
+            $('#testModal4').modal('hide');
+        };
+        $( function() {
+            let i = 0;
+            $('#displayButton2').click( function () {//initial→テスト開始
+                $('#titleIM').html('テスト（入力形式)');
+                $('#startIM').click(function(){
+                    nextProblem2(data, i);
+                    $('#IM').modal('hide');
+                });
+                $('#IM').modal('show');
+            });
+            $('.closeButton2').click( function () {
+                $('#testModal3').modal('hide');
+                $('#testModal4').modal('hide');
+            });
+            $('#displayAnswer2').click( function () {//問題表示→解答表示に移行
+                Answer2(data, i);
+            });
+            $('#displayProblem3').click( function () {//解答表示→次の問題に移行
+                i++;
+                nextProblem2(data, i);
+            });     
+            $('#displayButton').click( function () {//initial→テスト開始
+                $('#titleIM').html('テスト（確認形式)');
+                $('#startIM').click(function(){
+                    nextProblem(data, i);
+                    $('#IM').modal('hide');
+                });
+                $('#IM').modal('show');
+            });
+            $('.closeButton').click( function () {
+                $('#testModal').modal('hide');
+                $('#testModal2').modal('hide');
+            });
+            $('#displayAnswer').click( function () {//問題表示→解答表示に移行
+                Answer(data, i);
+            });
+            $('#displayProblem').click( function () {//分からなかったとき、解答表示→次の問題に移行
+                if (data[i].state>0){
+                    data[i].state--;
+                }else{
+                    data[i].state=0;
+                }
+                data[i].done = true;
+                i++;
+                nextProblem(data, i);
+            });
+            $('#displayProblem2').click( function () {//分かったとき、解答表示→次の問題に移行
+                if (data[i].state>0){
+                    data[i].state++;
+                }else{
+                    data[i].state=1;
+                }
+                data[i].done = true;
+                i++;
+                nextProblem(data, i);
+            });
+            $('.closeButtonIM').click( function(){
+                $('#IM').modal('hide');
+            });
+            $('#testModal,#testModal2,#testModal3,#testModal4').on('hidden.bs.modal', function () {
+                if ($('#testModal').css('display') == 'none' 
+                            && $('#testModal2').css('display') == 'none' 
+                                        && $('#testModal3').css('display') == 'none' 
+                                                    && $('#testModal4').css('display') == 'none') {
+                    console.log("テスト結果を送信する");
+                    const data_str = JSON.stringify(data);
+                    document.getElementById("id_data").value = data_str;
+                    document.forms[0].submit();
+                }
+            });
+        });
+    </script>
+    <style>
+        #wordlists{
+            color:white;
+        }
+    </style>
+</html>

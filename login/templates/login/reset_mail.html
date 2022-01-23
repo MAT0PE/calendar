@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <!-- <link rel="stylesheet" href="./templates/study_record/leaderboard_header.css"> -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <title>パスワードの再設定</title>
+    </head>
+    <body>
+        <a class="btn btn-secondary" href="/login" role="button" style="padding-left: 5px">＜戻る</a>
+        <h2>パスワードの再設定</h2>
+        {% if alert %}
+            <span style="color:red">パスワードの再設定を行えるのは本登録されているアカウントだけです。</span>
+        {% endif %}
+        <table>
+            <form method="post" action="">
+            {% csrf_token %}
+            <tbody>
+                <tr>
+                    <th>{{ form.email.label }}</th>
+                    <td>
+                        {{ form.email }}
+                    </td>
+            </tbody>
+            <tr>
+                <td>
+                    <input type="submit" value="メールを送信" name="reset">
+                    <br>※メールの送信には少し時間がかかります
+                </td>
+            </tr>
+            </form>
+          </table>
+    </body>
+</html>

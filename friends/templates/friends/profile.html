@@ -1,0 +1,92 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <title>プロフィール</title>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div>
+                    <a class="btn btn-secondary" href="/friends" role="button" style="padding-left: 5px">＜戻る</a>
+                </div>
+                <div>
+                    <h4 style="margin-left: 10px; margin-top: 5px;">プロフィール</h4>
+                </div>
+            </div>
+        </div>
+            <form method="post" action="">
+                {% csrf_token %}
+                <input type='submit' value=' 設定 ' style="margin-left: 10px;" class="btn btn-secondary">
+            </form>
+            <div class='Cell'>
+                <div class='Subject'>ユーザーネーム</div>
+                <span class='Content'>{{ name }}</span>
+            </div>
+            <div class='Cell'>
+                <div class='Subject'>ユーザーID</div>
+                <div class='Content'>{{ id }}</div>
+            </div>
+            <div class='Cell'>
+                <div class='Subject'>一言コメント</div>
+                <span class='Content'>{{ message }}</span>
+            </div>
+            <div class='Cell'>
+                <div class='Subject'>ランキングへの掲載</div>
+                <span class='Content'>
+                    {% if ranking %}
+                    掲載する
+                    {% else %}
+                    掲載しない
+                    {% endif %}
+                </span>
+            </div>
+    </body>
+</html>
+
+<style>
+    .Cell {
+        height: 70px;
+        background-color: aliceblue;
+        border-style: none;
+        margin-bottom: 10px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+    }
+
+    .Subject {
+        font-weight: bold;
+        padding-left: 20px;
+        padding-top: 10px;
+    }
+
+    .Content {
+        padding-left: 40px;
+    }
+
+    button.Button {
+        
+        float: right;
+
+        margin-right: 20px; 
+
+        /* 背景色を薄いグレー色に指定 */
+        background-color: #d3d3d3;
+
+        /* ボーダーをなくす */
+        border-style: none;
+
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    button.Button:hover {
+        /* 背景色を濃いグレー色に指定 */
+        background-color: #a9a9a9;
+    }
+</style>

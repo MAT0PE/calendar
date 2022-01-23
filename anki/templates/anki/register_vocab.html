@@ -1,0 +1,80 @@
+<html>
+    {% load static %}
+    <head>
+        <title>暗記登録</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="./style.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'study_record/style.css' %}">
+    </head>
+    <body style="background-color: rgb(70, 103, 131);">
+        <form action="{% url 'vocabulary' %}">
+            <input class="btn btn-primary" type="submit" value="戻る"/>
+        </form>
+        
+        <form method="post" action="">
+            {% csrf_token %}
+            ※クォテーションを用いたい場合はダブルクォートではなくシングルクォートを使用してください
+                {% if alert1 %}
+                    <span style="color:red">ダブルクォートを使用しないでください。</span><br>
+                {% endif %}
+                <b>一つ一つ入力</b>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>{{ one_by_one.foreign.label }}</td>
+                            <td>{{ one_by_one.foreign }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ one_by_one.japanese.label }}</td>
+                            <td>{{ one_by_one.japanese }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ one_by_one.sentence.label }}</td>
+                            <td>{{ one_by_one.sentence }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <input class="btn btn-primary" type="submit" value="登録" name="obo">
+                </div>
+                <hr/>
+
+                {% if alert2 %}
+                    <span style="color:red">指定された形式で入力してください。</span><br>
+                {% endif %}
+                <b>まとめてjson形式で入力</b>
+                <div>
+                    {{ json.json.label|linebreaksbr }}
+                    <br>例）[{"foreign":"apple", "japanese":"りんご", "sentence":"He said, 'I ate an apple'."},
+                    <br>　　{"foreign":"book", "japanese":"本"}]
+                    <br>※json形式には必ずダブルクォートを用いてください（単語、訳、例文の中のクォテーションのみシングルクォートを使用してください）
+                </div>
+                <div style="width:60%;">
+                    {{ json.json }}
+                </div>
+                <div>
+                    <input class="btn btn-primary" type="submit" value="登録" name="j">
+                </div>
+        </form>
+    </body>
+</html>
+
+<style>
+    .box {
+        background-color: #dcdcdc;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        margin-bottom: 20px;
+    }
+</style>

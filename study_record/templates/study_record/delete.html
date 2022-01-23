@@ -1,0 +1,33 @@
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'study_record/style.css' %}">
+        <title>勉強記録の削除</title>
+        <style>
+            .btn-primary {
+                border-color:black;
+                background-color: black;
+            }
+        </style>
+    </head>
+    <body style="background-color: rgb(70, 103, 131);">
+        <div style="margin-top: 20px; margin-left: 20px">
+            <a class="btn btn-primary" href="/edit_and_delete" role="button" style="padding-left: 5px;">＜戻る</a>
+            <h2>勉強記録の削除</h2>
+            本当に以下の勉強記録を削除しますか？
+            <br/>科目：{{record.subject}}
+            <br/>開始時刻：{{record.start}}
+            <br/>終了時刻：{{record.end}}
+            <form method="post" action="">
+                {% csrf_token %}
+                <input class="btn btn-primary" type="submit" value="はい" name="yes">
+                <input class="btn btn-primary" type="submit" value="いいえ" name="no">
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,19 @@
+button.Button {
+    /* 文字サイズを15pxに指定 */
+    font-size: 45px;
+
+    /* 縦方向に10px、
+     * 横方向に30pxの余白を指定 */
+    padding: 100px 300px;
+
+    /* 背景色を濃い青色に指定 */
+    background-color: #ffffff;
+
+    /* ボーダーをなくす */
+    border-style: none;
+}
+
+button.Button:hover {
+    /* 背景色を明るい青色に指定 */
+    background-color: #c0c0c0;
+}

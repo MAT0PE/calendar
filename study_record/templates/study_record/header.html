@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand navbar-dark" style="padding-left: 10px; padding-right: 10px;">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+            <i class="fa fa-pencil" style="font-size:36px; margin-right: 20px !important;"></i>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" id="home" href="{% url 'main' %}">ホーム</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="edit" href="{% url 'edit_and_delete' %}">追加/編集</a>
+                </li>
+            <li class="nav-item">
+            <a class="nav-link" id="record" href="{% url 'detail' %}">詳細</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" id="wordlists" href="{% url 'vocabulary' %}">暗記</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="friends" href="{% url 'friends' %}">友達</a>
+            </li>
+        </ul>
+        <button class="nav-item btn btn-outline-secondary ml-auto loginPage" style="margin-left: auto;" type="submit">ログイン</button>
+    </div>
+</nav>
+<div class="modal loginModal">
+    <script>
+        $('.loginPage').click( function () {
+            var way = JSON.parse("{{bool|safe}}".replaceAll("'",'"'));
+            if (way){$('.loginModal').modal('toggle');}
+            else window.location.href = "{% url 'logout' %}";
+        });
+    </script>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="メールアドレス">
+                </div><br/>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="パスワード">
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">ログイン情報を記憶</label>
+                </div><br/>
+                <button type="submit" class="btn btn-primary">ログイン</button>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>

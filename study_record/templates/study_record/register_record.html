@@ -1,0 +1,94 @@
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'study_record/style.css' %}">
+        <title>勉強記録の登録</title>
+    </head>
+    <body>
+        <div class="box">
+            <a class="other-page" href="{% url 'main' %}">ホーム</a>
+            <a class="current-page" href="{% url 'register_record' %}">追加</a>
+            <a class="other-page" href="{% url 'edit_and_delete' %}">編集・削除</a>
+            <a class="other-page" href="{% url 'detail' %}">詳細</a>
+            <a class="other-page" href="{% url 'friends' %}">友達</a>
+            <a class="other-page" href="{% url 'vocabulary' %}">暗記</a>
+            <a class="right" href="{% url 'logout' %}">ログアウト</a>
+        </div>
+<div style="margin-top: 30px;">
+        <h2>勉強記録の登録</h2>
+        <form method="post" action="">
+            {% csrf_token %}
+        <table>
+            <tbody>
+                <tr>
+                    <th>{{ form.subject.label }}</th>
+                    <td>
+                        {{ form.subject }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form.start.label }}</th>
+                    <td>
+                        {{ form.start }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form.end.label }}</th>
+                    <td>
+                        {{ form.end }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        {% if alerts.alert1 %}
+            <span style="color:red">開始時刻よりも終了時刻が先になっています。</span><br>
+        {% endif %}
+        {% if alerts.alert2 %}
+            <span style="color:red">24時間以上の勉強記録をまとめて登録することはできません。</span><br>
+        {% endif %}
+        {% if alerts.alert3 %}
+            <span style="color:red">他の勉強記録と重複しています。</span><br>
+        {% endif %}
+        <input type="submit" value="登録" name="register">
+        </form>
+</div>
+    </body>
+</html>
+
+<style>
+    .box {
+        background-color: #dcdcdc;
+        height: 60px;
+    }
+
+    .current-page {
+        color: #000000;
+        margin-left: 20px;
+        margin-top: 16px;
+        float: left;
+    }
+
+    a:hover {
+        color: #000000;
+        text-decoration: none;
+    }
+
+    .other-page {
+        color: #808080;
+        margin-left: 20px;
+        margin-top: 16px;
+        float: left;
+    }
+
+    .right {
+        color: #808080;
+        float: right;
+        margin-right: 20px;
+        margin-top: 16px;
+    }
+</style>

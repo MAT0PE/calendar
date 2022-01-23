@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <title>パスワードの再設定</title>
+    </head>
+    <body>
+        <h2>パスワードの再設定</h2>
+        {% if alert1 %}
+            <div style="color:red">パスワードは四文字以上にしてください。</div>
+        {% endif %}
+        {% if alert2 %}
+            <div style="color:red">登録されたメールアドレスと一致しません。</div>
+        {% endif %}
+        <table>
+            <form method="post" action="">
+            {% csrf_token %}
+            <tbody>
+                <tr>
+                    <th>{{ form.email.label }}</th>
+                    <td>
+                        {{ form.email }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form.password1.label }}</th>
+                    <td>
+                        {{ form.password1 }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form.password2.label }}</th>
+                    <td>
+                        {{ form.password2 }}
+                    </td>
+                </tr>
+            </tbody>
+            <tr>
+                <td>
+                    <input type="submit" value="再設定" name="reset">
+                </td>
+            </tr>
+            </form>
+          </table>
+    </body>
+</html>

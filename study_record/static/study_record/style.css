@@ -1,0 +1,52 @@
+.nav-link{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.navbar-dark{
+    background-color: rgb(16, 18, 51);
+}
+.fa-pencil{
+    color:rgb(180, 180, 180);
+}
+.nav-link{
+    color:rgb(180, 180, 180);
+}
+.canvasdisplay {
+    align-items: center;
+    justify-content: center;
+}
+canvas {
+    max-width: 100%;
+    background-color:black;
+}
+#registerButton{
+    width:100%; 
+    margin-top: 5px !important; 
+    margin-bottom: 5px !important;
+}
+#editButton{
+    width:100%;
+    margin-top:5px !important; 
+    margin-bottom: 5px !important;
+}
+button{
+    min-width: 80px;
+    max-width: 100px;
+}
+.jumbotron{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.btn-primary{
+    background-color:black;
+    outline: none;
+    border: none;
+}
+.triangle {
+    width: 0;
+    height: 0;
+    border: solid 30px;
+    border-color: transparent transparent black transparent;
+}

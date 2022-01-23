@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <title>検索</title>
+</head>
+ 
+<body>
+        <a class="btn btn-secondary" href="/friends" role="button" style="padding-left: 5px">＜戻る</a>
+    <div>
+    <form method="GET" action="{% url 'search' %}">
+        <input type="text" name="keyword">
+        <button type="submit">検索</button>
+    </form>
+    <b>{{ text }}</b>
+    <form method="post" action="">
+        {% csrf_token %}
+        {% for user in users %}
+            <div class="Box">
+                <span class="Name">{{ user.name }}</span><span class="Id">id:{{ user.userid }}</span><span class="Message">{{ user.message }}</span>
+                {% if user.state == 1 %}
+                    <span class="Sent">送信済み</span>
+                {% elif user.state == 2 %}
+                <span class="Friend">友達</span>
+                {% else %}
+                    <button class="NotSent" type="submit" name={{user.userid}}>送信する</button>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </form>
+    </div>
+</body>
+ 
+</html>
+
+<style>
+    .Box {
+        margin-top: 10px;
+        height: 40px;
+    }
+
+    .Name {
+        font-size: 25px;
+        font-weight: bold;
+        max-width: 200px;
+        overflow: hidden;
+        margin-left: 20px;
+    }
+
+    .Id {
+        font-size: 20px;
+        color: #696969;
+        width: 150px;
+        max-height: 16px;
+        overflow: hidden;
+        margin-left: 10px;
+    }
+
+    .Message {
+        font-size: 20px;
+        width: calc(100%-350px);
+        max-height: 16px;
+        overflow: hidden;
+        margin-left: 10px;
+    }
+
+    .Sent {
+        color: #ffffff;
+        background-color: #696969;
+        font-size: 15px;
+        padding: 5px;
+        width: 80px;
+        height: 30px;
+    }
+
+    .Friend {
+        color: #ffffff;
+        background-color: #7fff00;
+        font-size: 15px;
+        padding: 5px;
+        width: 60px;
+        height: 30px;
+    }
+
+    button.NotSent {
+        color: #ffffff;
+        
+        width: 80px;
+        height: 30px;
+
+        /* 背景色を薄いグレー色に指定 */
+        background-color: #1e90ff;
+
+        /* ボーダーをなくす */
+        border-style: none;
+
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    button.NotSent:hover {
+        /* 背景色を濃いグレー色に指定 */
+        background-color: #0000ff;
+        color:#ffffff;
+    }
+</style>

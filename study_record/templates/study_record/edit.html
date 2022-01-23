@@ -1,0 +1,80 @@
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'study_record/style.css' %}">
+        <title>勉強記録の編集</title>
+        <style>
+            .btn-primary {
+                border-color:black;
+                background-color: black;
+            }
+        </style>
+    </head>
+    <body style="background-color: rgb(70, 103, 131);">
+        <div style="margin-top: 20px;margin-left: 20px;">
+                <a class="btn btn-primary" href="/edit_and_delete" role="button" style="padding-left: 5px;">＜戻る</a>
+                <h2>勉強記録の編集</h2>
+                <form method="post" action="">
+                {% csrf_token %}
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>{{ form.subject.label }}</th>
+                                <td>
+                                    {{ form.subject }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ form.start.label }}</th>
+                                <td>
+                                    {{ form.start }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ form.end.label }}</th>
+                                <td>
+                                    {{ form.end }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {% if alerts.alert1 %}
+                    <span style="color:red">開始時刻よりも終了時刻が先になっています。</span><br>
+                {% endif %}
+                {% if alerts.alert2 %}
+                    <span style="color:red">24時間以上の勉強記録をまとめて登録することはできません。</span><br>
+                {% endif %}
+                {% if alerts.alert3 %}
+                    <span style="color:red">他の勉強記録と重複しています。</span><br>
+                {% endif %}
+                <input class="btn btn-primary" type="submit" value="保存" name="save">
+                <input class="btn btn-primary" type="submit" value="元に戻す" name="reset">
+            </form>
+        </div>
+    </body>
+</html>
+
+<script>
+    var initials = JSON.parse("{{initials|safe}}".replaceAll("'",'"'));
+    function modify(initials) {
+	    var s = initials.s;
+	    s = s.replace(",", "-");
+        s = s.replace(",", "-");
+        s = s.replace(",", "T");
+        s = s.replace(",", ":");
+        var e = initials.e;
+        e = e.replace(",","-");
+        e = e.replace(",","-");
+        e = e.replace(",","T");
+        e = e.replace(",",":");
+        return {"s":s, "e":e}
+    }
+    initials = modify(initials);
+    document.getElementById("id_start").value = initials.s;
+    document.getElementById("id_end").value = initials.e;
+</script>

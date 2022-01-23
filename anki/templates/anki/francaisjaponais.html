@@ -1,0 +1,146 @@
+<!-- 問題が日本語で外国語をタイプして答える -->
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form.data.as_hidden }}
+        </form>
+        <button type="button" id="displayButton2" class="btn btn-primary">
+            テスト開始
+        </button>
+        <!-- 問題を表示するmodal -->
+        <div class="modal fade" id="testModal3" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="japaneseWord">ここに日本語</h4>
+                    </div>
+                    <div class="modal-body" id="divOfInputAnswer">
+                        <input type="text" id="inputAnswer" value="">
+                    </div>
+                    <div class="modal-footer" id="answerdisplayButton2">
+                        <button type="button" class="btn closeButton2">close</button>
+                        <button type="submit" class="btn btn-primary" id="displayAnswer2">解答を表示</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 解答を表示するmodal -->
+        <div class="modal fade" id="testModal4" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="answer2">ここに解答</h4>
+                        <p id="judge">正解不正解</p>
+                    </div>
+                    <div class="modal-body" id="exampleOfAnswer2">
+                        例文あれば表示
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn closeButton2">close</button>
+                        <button type="button" class="btn btn-primary" id="displayProblem3">次の問題</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var data = JSON.parse("{{vocabs}}".replaceAll("&quot;", '"').replaceAll('&#x27;', "'"));
+
+            //jsonデータのシャッフル
+            const shuffle = (data) => {
+                for (let i=0; i<data.length; i++){
+                    const j = Math.floor(Math.random() *data.length);
+                    [data[i], data[j]]=[data[j], data[i]];
+                }
+            };
+            shuffle(data);
+
+            //遷移の関数
+            const Answer2 = (data, i) => {
+                if (document.getElementById("inputAnswer").value==data[i].foreign) {
+                    judge.innerHTML="正解です";
+                    if (data[i].state>0){
+                        data[i].state++;
+                    }else{
+                        data[i].state=1;
+                    }
+                    data[i].done = true;
+                }else{
+                    if (data[i].state>0){
+                        data[i].state--;
+                    }else{
+                        data[i].state=0;
+                    }
+                    data[i].done = true;
+                    if (document.getElementById("inputAnswer").value==""){
+                        judge.innerHTML="未入力です";
+                    }else{
+                        judge.innerHTML="不正解です"
+                    }
+                }
+                document.getElementById("inputAnswer").value="";
+                answer2.innerHTML=data[i].foreign;
+                if (data[i].sentence){
+                        exampleOfAnswer2.innerHTML=data[i].sentence;
+                    }else{
+                        exampleOfAnswer2.innerHTML="例文はありません";
+                    }
+                $('#testModal3').modal('hide');
+                $('#testModal4').modal('show');
+            };
+
+            const nextProblem2 = (data, i) => {
+                if (i==data.length){
+                    answerdisplayButton2.innerHTML="";
+                    japaneseWord.innerHTML="お疲れさまでした！";
+                    divOfInputAnswer.innerHTML="テストは終了しました";
+                    const data_str = JSON.stringify(data);
+                    document.getElementById("id_data").value = data_str;
+                    const newButton = document.createElement("button");
+                    newButton.setAttribute("class", "btn btn-primary modal-footer");
+                    newButton.setAttribute("onclick", "document.forms[0].submit();");
+                    newButton.innerHTML = "戻る";
+                    document.getElementById("answerdisplayButton2").appendChild(newButton);
+                    console.log("nanndeeeeeee");
+                }else{
+                    japaneseWord.innerHTML=data[i].japanese;
+                    console.log("dousite");
+                    console.log(data.length)
+                }
+                $('#testModal4').modal('hide');
+                $('#testModal3').modal('show');
+            };
+
+            //日本語->外国語、書き取り問題
+            $( function() {
+                let i = 0;
+                $('#displayButton2').click( function () {//initial→テスト開始
+                    nextProblem2(data, i);
+                });
+
+                $('.closeButton2').click( function () {//テスト中→テスト中止
+                    const data_str = JSON.stringify(data);
+                    document.getElementById("id_data").value = data_str;
+                    document.forms[0].submit();
+                    $('#testModal3').modal('hide');
+                    $('#testModal4').modal('hide');
+                });
+
+                $('#displayAnswer2').click( function () {//問題表示→解答表示に移行
+                    Answer2(data, i);
+                });
+
+                $('#displayProblem3').click( function () {//解答表示→次の問題に移行
+                    i++;
+                    nextProblem2(data, i);
+                });
+            });
+        </script>
+    </body>
+</html>

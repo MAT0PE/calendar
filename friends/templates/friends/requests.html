@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <title>リクエスト</title>
+</head>
+ 
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div>
+                <a class="btn btn-secondary" href="/friends" role="button" style="padding-left: 5px">＜戻る</a>
+            </div>
+            <div>
+                <h4 style="margin-left: 10px; margin-top: 5px;">受信箱</h4>
+            </div>
+        </div>
+    </div>
+    <form method="post" action="">
+        {% csrf_token %}
+        {% for request in requests %}
+        <span class="Name">{{ request.name }}</span><span class="Id">id:{{ request.userid }}</span><span class="Message">{{ request.message }}</span>
+        <button class="Approve" type="submit" name=approve{{request.pk}}>○</button>
+        <button class="Deny" type="submit" name=deny{{request.pk}}>×</button>
+        {% endfor %}
+    </form>
+</body>
+ 
+</html>
+
+<style>
+    .Name {
+        font-size: 25px;
+        font-weight: bold;
+        max-width: 200px;
+        overflow: hidden;
+        margin-left: 20px;
+    }
+
+    .Id {
+        font-size: 20px;
+        color: #696969;
+        width: 150px;
+        max-height: 16px;
+        overflow: hidden;
+        margin-left: 10px;
+    }
+
+    .Message {
+        font-size: 20px;
+        width: calc(100%-350px);
+        max-height: 16px;
+        overflow: hidden;
+        margin-left: 10px;
+    }
+
+    button.Approve {
+        font-size: 25px;
+        color: #ffffff;
+        
+        width: 30px;
+        height: 30px;
+
+        /* 背景色を薄いグレー色に指定 */
+        background-color: #3030ff;
+
+        /* ボーダーをなくす */
+        border-style: none;
+
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    button.Approve:hover {
+        /* 背景色を濃いグレー色に指定 */
+        background-color: #0000ff;
+        color:#ffffff;
+    }
+
+    button.Deny {
+        font-size: 25px;
+        color: #ffffff;
+        
+        width: 30px;
+        height: 30px;
+
+        /* 背景色を薄いグレー色に指定 */
+        background-color: #ff3030;
+
+        /* ボーダーをなくす */
+        border-style: none;
+
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    button.Deny:hover {
+        /* 背景色を濃いグレー色に指定 */
+        background-color: #ff0000;
+        color:#ffffff;
+    }
+</style>

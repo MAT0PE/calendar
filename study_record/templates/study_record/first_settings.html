@@ -1,0 +1,35 @@
+<html>
+    <head>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'study_record/style.css' %}">
+        <title>ユーザーネームの設定</title>
+    </head>
+    <body>
+        <h2>ユーザーネームの設定</h2>
+        <table>
+            <form method="post" action="">
+            {% csrf_token %}
+            <tbody>
+                <tr>
+                    <th>{{ form.name.label }}</th>
+                    <td>
+                        {{ form.name }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ form.ranking.label }}</th>
+                    <td>
+                        {{ form.ranking }}
+                    </td>
+                </tr>
+            </tbody>
+            これらの設定は後から変更が可能です
+            <tr>
+                <td>
+                    <input type="submit" value="設定" name="register">
+                </td>
+            </tr>
+            </form>
+          </table>
+    </body>
+</html>

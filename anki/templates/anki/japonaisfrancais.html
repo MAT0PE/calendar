@@ -1,0 +1,165 @@
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    </head>
+<!-- closeボタンとanswerの最後にjson送信機能つける -->
+    <body>
+        <button type="button" id="displayButton" class="btn btn-primary">
+            テスト開始
+        </button>
+        <!-- 問題を表示するmodal -->
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form.data.as_hidden }}
+        </form>
+        <div class="modal fade" id="testModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="frenchWord">ここにフランス語</h4>
+                    </div>
+                    <div class="modal-body" id="exampleOfProblem">
+                        ここの例文はoption
+                    </div>
+                    <div class="modal-footer" id="answerDisplayButton">
+                        <button type="button" class="btn closeButton">close</button>
+                        <button type="button" class="btn btn-primary" id="displayAnswer">解答を表示</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 解答を表示するmodal -->
+        <div class="modal fade" id="testModal2" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="answer">ここに解答</h4>
+                    </div>
+                    <div class="modal-body" id="exampleOfAnswer">
+                        例文あれば表示
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn closeButton">close</button>
+                        <button type="button" class="btn btn-primary" id="displayProblem">分からなかった</button>
+                        <button type="button" class="btn btn-primary" id="displayProblem2">分かった</button>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <script>
+            var data = JSON.parse("{{vocabs}}".replaceAll("&quot;", '"').replaceAll('&#x27;', "'"));
+
+            //jsonデータのシャッフル
+            const shuffle = data => {
+                for (let i=0; i<data.length; i++){
+                    const j = Math.floor(Math.random() *data.length);
+                    [data[i], data[j]]=[data[j], data[i]];
+                }
+            };
+            shuffle(data);
+            //遷移の関数
+            const Answer = (data, i) => {
+                answer.innerHTML=data[i].japanese;
+                if (data[i].sentence){
+                        exampleOfAnswer.innerHTML=data[i].sentence;
+                    }else{
+                        exampleOfAnswer.innerHTML="例文はありません";
+                    }
+                $('#testModal').modal('hide');
+                $('#testModal2').modal('show');
+            };
+
+        
+
+            const nextProblem = (data, i) => {
+                if (i==data.length){
+                    const data_str = JSON.stringify(data);
+                    document.getElementById("id_data").value = data_str;
+                    answerDisplayButton.innerHTML="";
+                    frenchWord.innerHTML="お疲れ様でした！";
+                    exampleOfProblem.innerHTML="テストは終了しました";
+
+                    const newButton = document.createElement("button");
+                    newButton.setAttribute("class", "btn btn-primary modal-footer");
+                    newButton.setAttribute("onclick", "document.forms[0].submit();");
+                    newButton.innerHTML = "戻る";
+                    document.getElementById("answerDisplayButton").appendChild(newButton);
+
+                }else{
+                    frenchWord.innerHTML=data[i].foreign;
+                    if (data[i].sentence){
+                        exampleOfProblem.innerHTML=data[i].sentence;
+                    }else{
+                        exampleOfProblem.innerHTML="例文はありません";
+                    }
+                }
+                $('#testModal2').modal('hide');
+                $('#testModal').modal('show');
+            };
+
+            $( function() {
+                let i = 0;
+                $('#displayButton').click( function () {//initial→テスト開始
+                    nextProblem(data, i);
+                });
+
+                $('.closeButton').click( function () {//テスト中→テスト中止
+                    const data_str = JSON.stringify(data);
+                    document.getElementById("id_data").value = data_str;
+                    document.forms[0].submit();
+                    $('#testModal').modal('hide');
+                    $('#testModal2').modal('hide');
+                });
+
+                $('#displayAnswer').click( function () {//問題表示→解答表示に移行
+                    Answer(data, i);
+                });
+
+                $('#displayProblem').click( function () {//分からなかったとき、解答表示→次の問題に移行
+                    if (data[i].state>0){
+                        data[i].state--;
+                    }else{
+                        data[i].state=0;
+                    }
+                    data[i].done = true;
+                    i++;
+                    nextProblem(data, i);
+                });
+
+                $('#displayProblem2').click( function () {//分かったとき、解答表示→次の問題に移行
+                    if (data[i].state>0){
+                        data[i].state++;
+                    }else{
+                        data[i].state=1;
+                    }
+                    data[i].done = true;
+                    i++;
+                    nextProblem(data, i);
+                });
+            });
+    
+        </script>
+        <style>
+            .modal {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            }
+
+            .modal-content{
+            background-color: white;
+            width: 500px;
+            margin: 40% auto;
+            }
+
+        </style>
+    </body>
+</html>

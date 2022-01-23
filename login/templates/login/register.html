@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title>本登録</title>
+    </head>
+    <body>
+        <h2>本登録</h2>
+        {% if alert1 %}
+            <span style="color:red">パスワード四文字以上にしてください。</span>
+        {% endif %}
+        {% if alert2 %}
+            <span style="color:red">メールアドレスとパスワードが一致しません。</span>
+        {% endif %}
+        <table>
+            <form method="post" action="">
+            {% csrf_token %}
+            <tbody>
+                <tr>
+                    <th>{{ form.password.label }}</th>
+                    <td>
+                        {{ form.password }}
+                    </td>
+            </tbody>
+            <tr>
+                <td>
+                    <input type="submit" value="本登録" name="register">
+                </td>
+            </tr>
+            </form>
+          </table>
+    </body>
+</html>

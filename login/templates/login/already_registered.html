@@ -1,0 +1,12 @@
+<html>
+    <head>
+        <title>本登録済み</title>
+    </head>
+    <body>
+        <span style="color:red">このアカウントは既に本登録されています。</span>
+        <form method="post" action="">
+        {% csrf_token %}
+            <input type="submit" value="ログイン画面へ" name="login">
+        </form>
+    </body>
+</html>

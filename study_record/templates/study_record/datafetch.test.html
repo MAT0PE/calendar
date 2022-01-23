@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'study_record/style.css' %}">
+        <title>カレンダー</title>
+    </head>
+        <body style="background-color: rgb(70, 103, 131);">
+            <nav class="navbar navbar-expand navbar-dark" style="padding-left: 10px; padding-right: 10px;">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                        <i class="fa fa-pencil" style="font-size:36px; margin-right: 20px !important;"></i>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" id="home" href="{% url 'main' %}">ホーム</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="edit" href="{% url 'edit_and_delete' %}">追加/編集</a>
+                            </li>
+                        <li class="nav-item">
+                        <a class="nav-link" id="record" href="{% url 'detail' %}">詳細</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" id="wordlists" href="{% url 'vocabulary' %}">暗記</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="friends" href="{% url 'friends' %}">友達</a>
+                        </li>
+                    </ul>
+                    <a href="{% url 'logout' %}" class="nav-item btn btn-outline-secondary ml-auto loginPage" style="margin-left: auto;" type="submit">ログアウト</a>
+                </div>
+            </nav>
+        <form method="post" action="">
+            <div style="margin-left:3px; margin-top:6px;">
+                {% csrf_token %}
+                <p><span style="margin-top:1px;">{{ form.start }}</span><input value="表示" type="submit" class="btn" style="margin-left:3px; background-color: black; color: white;padding-top: 0px;padding-bottom: 0px;" name="date"><br />{{ form.start.help_text }}</p>   
+            </div>
+            <div style="margin-left:3px; margin-right:3px; margin-top:6px;">
+                <canvas id="sample" width="3100" height="1640"></canvas>
+            </div>  
+        </form>
+        
+        <script>
+            var data = {{dic|safe}};
+            var initial = "{{initial|safe}}".replaceAll(",","-");
+            document.getElementById("id_start").value = initial.toString();
+            test(data)
+            function test() {
+            //描画コンテキストの取得
+            var canvas = document.getElementById('sample');
+            if (canvas.getContext) {
+                var context = canvas.getContext('2d');
+                for (var i = 0; i < 7;  i++){//縦枠の作成
+                    context.strokeStyle = '#888888'; //枠線の色は灰色
+                    context.strokeRect(i*400+150, 100, 400, 1440);
+                }
+                for (var j = 0; j < 8;  j++){//横枠の作成
+                    context.strokeStyle = '#888888'; //枠線の色は灰色
+                    context.strokeRect(150, j*180+100, 2800, 180);
+                }
+                for (var p = 0; p < 9;  p++){//時間枠の表示
+                    context.font = '20pt Times Roman';
+                    context.fillStyle = '#888888';
+                    context.textBaseline = 'middle';
+                    context.textAlign = 'center';
+                    context.fillText(p*3 + ":00", 80, p*180+100);
+                    context.fillText(p*3 + ":00", 3020, p*180+100);
+                }
+                for (var q = 0; q < 7;  q++){//時間の表示
+                    context.font = '35pt Times Roman';
+                    context.fillStyle = '#888888';
+                    context.textBaseline = 'middle';
+                    context.textAlign = 'center';
+                    context.fillText(data[q].date.match(/0?(\d{1,2})\//)[1]+"/"+data[q].date.match(/\/0?(\d{1,2})/)[1]+data[q].day, q*400+350, 70);
+                    context.fillText(data[q].date.match(/0?(\d{1,2})\//)[1]+"/"+data[q].date.match(/\/0?(\d{1,2})/)[1]+data[q].day, q*400+350, 1570);
+                }
+                for (var i = 0; i < 7; i++){
+                    for (var j = 0; j < data[i].record.length; j++){
+                        context.fillStyle = "#F0E68E";
+                        context.fillRect(i*400+155, Number(data[i].record[j].start.match(/(\d{1,2}):/)[1]*60)+Number(data[i].record[j].start.match(/:(\d{2})/)[1])+100, 390,  Number(data[i].record[j].length.match(/(\d{1,2}):/)[1]*60)+Number(data[i].record[j].length.match(/:(\d{2})/)[1]));
+                    }
+                }
+                for (var i = 0; i < 7; i++){
+                    for (var j = 0; j < data[i].record.length; j++){
+                        context.font = '20pt Times Roman';
+                        context.fillStyle = '#000000';
+                        context.textBaseline = 'hanging';
+                        context.textAlign = 'center';
+                        context.fillText(data[i].record[j].name, i*400+350, Number(data[i].record[j].start.match(/(\d{1,2}):/)[1]*60)+Number(data[i].record[j].start.match(/:(\d{2})/)[1])+120);
+                        }
+                    }
+                }
+            }
+    </script>
+        </script>
+        </body>
+        <style>
+            #record{
+                color:white;
+            }
+        </style>
+    </html>

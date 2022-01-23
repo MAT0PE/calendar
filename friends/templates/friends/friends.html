@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+ 
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'study_record/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>友達</title>
+</head>
+<body style="background-color: rgb(70, 103, 131);">
+    <nav class="navbar navbar-expand navbar-dark" style="padding-left: 10px; padding-right: 10px;">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                <i class="fa fa-pencil" style="font-size:36px; margin-right: 20px !important;"></i>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" id="home" href="{% url 'main' %}">ホーム</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="edit" href="{% url 'edit_and_delete' %}">追加/編集</a>
+                    </li>
+                <li class="nav-item">
+                <a class="nav-link" id="record" href="{% url 'detail' %}">詳細</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" id="wordlists" href="{% url 'vocabulary' %}">暗記</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="friends" href="{% url 'friends' %}">友達</a>
+                </li>
+            </ul>
+            <a href="{% url 'logout' %}" class="nav-item btn btn-outline-secondary ml-auto loginPage" style="margin-left: auto;" type="submit">ログアウト</a>
+        </div>
+    </nav>
+    <div>
+        <p style="margin-top:10px;"> 
+            <a class="btn btn-primary" href="/search" role="button" style="margin-left: 10px; margin-right: 10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                </svg>
+                検索
+            </a>
+            <a role="button" href="/requests" class="btn btn-primary" role="button" style="margin-left: 10px; margin-right: 10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383l-4.758 2.855L15 11.114v-5.73zm-.034 6.878L9.271 8.82 8 9.583 6.728 8.82l-5.694 3.44A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.739zM1 11.114l4.758-2.876L1 5.383v5.73z"></path>
+                </svg>
+                受信
+            </a>
+            <a type="button" href="/profile" class="btn btn-primary" role="button" style="margin-left: 10px; margin-right: 10px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"></path>
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>
+                </svg>
+                プロフィール
+            </a>
+        </p><hr/>
+    </div>
+    <div class="container-fluid">
+        <div class="row" style="justify-content: center;">
+                <h4>友達リスト</h4>
+        </div><hr/>
+        <div class="RecordBox" style="text-align:center;">
+            <form method="post" action="">
+                {% csrf_token %}
+            {% for friend in friends %}
+                <button class="Button" type="submit" name={{ friend.pk }}><span class="name">{{ friend.name }}</span><span class="text">{{ friend.last_text }}</span>{% ifnotequal friend.unread 0 %}<span class="unread">{{ friend.unread }}</span>{% endifnotequal %}</button>
+                <br>
+            {% endfor %}
+            </form>
+        </div>
+    </div>
+</body>
+ 
+</html>
+
+<style>
+    .RecordBox {
+        position: fixed;
+        box-sizing: content-box;
+        height: calc(100% - 100px);
+        width: 80%;
+        overflow-y: scroll;
+    }
+    button.Button {
+        
+        width: 100%;
+        height: 60px;
+
+        margin-bottom: 10px; 
+
+        /* 背景色を薄いグレー色に指定 */
+        background-color: #d3d3d3;
+
+        /* ボーダーをなくす */
+        border-style: none;
+
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    button.Button:hover {
+        /* 背景色を濃いグレー色に指定 */
+        background-color: #a9a9a9;
+    }
+
+    .name {
+        font-size: 25px;
+        font-weight: bold;
+        padding: 0px;
+        margin-left: 30px;
+        float: left;
+        max-width: 200px;
+        overflow: hidden;
+    }
+
+    .text {
+        font-size: 20px;
+        color: #696969;
+        padding: 5px;
+        margin-left: 30px;
+        float: left;
+        max-width: calc(100% - 350px);
+        max-height: 32px;
+        overflow: hidden;
+    }
+
+    .unread {
+        font-size: 20px;
+        color: #ffffff;
+        padding-top: 1px;
+        padding-bottom: 1px;
+        padding-left: 10px;
+        padding-right: 10px;
+        float: right;
+        background-color: #ff0000;
+        text-align: center;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+        margin-right: 10px;
+    }
+
+    .box {
+        background-color: #dcdcdc;
+        height: 60px;
+    }
+
+    .current-page {
+        color: #000000;
+        margin-left: 20px;
+        margin-top: 16px;
+        float: left;
+    }
+
+    a:hover {
+        color: #000000;
+        text-decoration: none;
+    }
+
+    .other-page {
+        color: #808080;
+        margin-left: 20px;
+        margin-top: 16px;
+        float: left;
+    }
+
+    .right {
+        color: #808080;
+        float: right;
+        margin-right: 20px;
+        margin-top: 16px;
+    }
+    #friends {
+        color: white;
+    }
+</style>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <title>個チャ</title>
+</head>
+ 
+<body>
+    <div class="container-fluid row_1">
+        <div class="row">
+            <a class="col-auto btn" id="color_ch" href="/friends" role="button" style="font-size: 25px; color: #505050;">＜戻る </a>
+            <div class="col-4 Name">{{ name }}</div>
+        </div>
+    </div>
+    <div class="MessageBox">
+        <div id="scroll-inner">
+            <table width="100%">
+                <tr><th></th></tr>
+                {% for message in messages %}
+                    {% if message.me_to_you %}
+                        <tr>
+                            <td>
+                                <div class="MeToYou">{{ message.text|linebreaksbr }}</div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td>
+                                <div class="YouToMe">{{ message.text|linebreaksbr }}</div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="TypeSend">
+            <table height="100%" width="100%">
+                <tr height="100%" width="100%">
+                    <td height="100%" width="100%">
+                        {{ form.text }}<button class="Button" type="submit"><spam id="submit">送信</spam></button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+
+</body>
+
+
+<style>
+    body{
+        margin: 20px; /* bodyの外側の余白を指定する */
+        background-color: #87cefa;
+    }
+
+    .Name {
+        font-size: 35px;
+        font-weight: bold;
+        color: #505050;
+    }
+
+    .MessageBox {
+        position: fixed;
+        top: 140px;
+        left: 0px;
+        box-sizing: content-box;
+        height: calc(100% - 250px);
+        width: 100%;
+        overflow-y: scroll;
+    }
+
+    /* #scroll-inner{
+        height: 600px;
+    } */
+
+
+    .MeToYou {
+        max-width: 85%;
+        word-break: normal;
+        font-size: 20px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+        background-color: #00ff00;
+        margin-right: 20px;
+        margin-bottom: 10px;
+        float: right;
+    }
+
+    .YouToMe {
+        max-width: 85%;
+        word-break: normal;
+        font-size: 20px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+        background-color: #ffffff;
+        margin-left: 20px;
+        margin-bottom: 10px;
+        float: left;
+    }
+
+    .TypeSend {
+        height: 120px;
+        width: calc(100% - 50px);
+        position: fixed;/*←絶対位置*/
+        bottom: 25px;
+        left: 25px;
+    }
+
+    #id_text {
+        width: 90%;
+        height: 100%;
+    }
+
+    button.Button {
+        float: right;
+
+        margin-top: 35px;
+        
+        width: 9%;
+        height: 40px;
+
+        margin-bottom: 10px; 
+
+        /* 背景色を薄いグレー色に指定 */
+        background-color: #1e90ff;
+
+        /* ボーダーをなくす */
+        border-style: none;
+
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    button.Button:hover {
+        /* 背景色を濃いグレー色に指定 */
+        background-color: #0000ff;
+    }
+
+    #submit {
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 20px;
+    }
+</style>
+
+
+<script>
+    let target = document.getElementById('scroll-inner');
+    target.scrollIntoView(false);
+document.getElementById('color_ch').onmouseover = function(){
+    document.getElementById('color_ch').style.color = "#000000";
+}
+document.getElementById('color_ch').onmouseout = function(){
+    document.getElementById('color_ch').style.color = "#505050";
+}
+</script>
